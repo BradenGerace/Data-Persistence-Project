@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 public class MainManager : MonoBehaviour
 {
@@ -18,7 +19,22 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    public static MainManager Instance;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        //LoadScore();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,9 +84,36 @@ public class MainManager : MonoBehaviour
         ScoreText.text = $"Score : {m_Points}";
     }
 
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+    //public void SaveScore()
+    //{
+    //    SaveData data = new SaveData();
+    //    data.usernameInput = usernameInput;
+
+    //    string json = JsonUtility.ToJson(data);
+
+    //    File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    //}
+
+    //public void LoadScore()
+    //{
+    //    string path = Application.persistentDataPath + "/savefile.json";
+    //    if (File.Exists(path))
+    //    {
+    //        string json = File.ReadAllText(path);
+    //        SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+    //        usernameInput = data.usernameInput;
+    //    }
+    //}
 }
